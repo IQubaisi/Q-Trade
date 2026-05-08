@@ -72,7 +72,7 @@ All available via `pip install` and pre-installed in Google Colab except `stable
 
 All trained model weights, reward arrays, and generated figures are available via the project's Google Drive folder:
 
-**[Google Drive — DRL_CW folder](PASTE_YOUR_DRIVE_LINK_HERE)**
+**[Google Drive — DRL_CW folder](https://drive.google.com/drive/folders/1R21VYVkNOw2VM_WZ6gpVlIFHk7DrdhwP?usp=sharing)**
 
 This includes:
 
