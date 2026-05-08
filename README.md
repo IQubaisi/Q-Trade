@@ -22,9 +22,9 @@ This project implements a stock trading agent on Microsoft Corporation (MSFT) da
 
 **Advanced Tasks:**
 7. DQN implementation with Double DQN and Dueling DQN improvements
-8. DQN debugging and analysis (six independent runs, three failure modes, three fixes)
+8. DQN debugging and analysis (six independent runs, three failure modes, three fixes), plus pre-fix and post-fix ablation studies isolating each improvement
 9. PPO implementation on MSFT trading environment + CartPole-v1 validation
-10. Three-algorithm comparison and structural analysis
+10. Three-algorithm comparison, action distribution analysis, and entropy ablation
 
 ## Results Summary
 
@@ -66,14 +66,23 @@ All available via `pip install` and pre-installed in Google Colab except `stable
 - **Environment**: 4-state discretisation of MSFT daily price changes (s0–s3) with 3 actions (hold, buy, sell). Action masking prevents impossible trades (buy when holding, sell when flat).
 - **DQN architecture**: Shared 64-unit Tanh trunk → separate value and advantage heads (Dueling). Online network selects target actions, target network evaluates them (Double DQN). Huber (SmoothL1) loss, replay buffer of 20,000 transitions, target network update every 200 steps.
 - **PPO architecture**: Actor-Critic with shared 64-unit Tanh trunk. Generalised Advantage Estimation (GAE, λ=0.95). Clipped surrogate objective (ε=0.2). On the CartPole validation, timestep-based rollout collection (N_STEPS=2,048 per update) was required to match SB3's stability — episode-based collection produced policy oscillation due to short early episodes.
+- **Reproducibility**: All random seeds (Python, NumPy, PyTorch, CUDA) are fixed at SEED=42 in the setup cell. As documented by Henderson et al. (2018), DRL exhibits inherent run-to-run variance even with fixed seeds; cited results reflect specific training runs.
 
-## Saved Artefacts
+## Trained Models and Saved Results
 
-The notebook saves the following to `/content/drive/MyDrive/DRL_CW/`:
+All trained model weights, reward arrays, and generated figures are available via the project's Google Drive folder:
 
-- 15 figures (`fig1_msft_price.png` through `fig15_cartpole_validation.png`)
-- Reward arrays (`q_rewards.npy`, `dqn_rewards_fixed.npy`, `ppo_rewards.npy`, `ppo_cartpole_custom_rewards.npy`, `ppo_cartpole_sb3_rewards.npy`)
-- Network weights (`q_table_base.npy`, `dqn_weights.pth`, `ppo_weights.pth`, `ppo_cartpole_weights.pth`)
+**[Google Drive — DRL_CW folder](PASTE_YOUR_DRIVE_LINK_HERE)**
+
+This includes:
+
+- **Q-learning**: `q_table_base.npy`, `q_rewards.npy`, `q_rewards_eg.npy`, `q_rewards_softmax.npy`
+- **DQN**: `dqn_weights.pth`, `dqn_rewards_fixed.npy`, plus 8 ablation reward arrays (`dqn_ablation_*.npy` for pre-fix, `dqn_ablation_fixed_seeded_*.npy` for post-fix)
+- **PPO**: `ppo_weights.pth`, `ppo_rewards.npy`, `ppo_weights_seeded_high_entropy.pth`, `ppo_rewards_seeded_high_entropy.npy`
+- **CartPole**: `ppo_cartpole_weights.pth`, `ppo_cartpole_custom_rewards.npy`, `ppo_cartpole_sb3_rewards.npy`
+- **Figures**: `fig1_msft_price.png` through `fig16_action_distribution.png` (all report figures)
+
+To run the notebook with these pre-trained models, mount the Drive folder in Colab and the notebook will load existing weights instead of retraining (saves approximately 4 hours of compute).
 
 ## Author
 
